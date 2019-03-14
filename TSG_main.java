@@ -35,11 +35,21 @@ public class TSG_main {
 	}
 
 	public static String getRegistrationNumber() {
-		System.out.println("\nEnter Registration number ( Follow this format:xxx-12xx) :");
-		Scanner scan = new Scanner(System.in);
-		return scan.next();
+				System.out.println("\nEnter Registration number ( Follow this format:xxx-12xx) :");
+				Scanner scan = new Scanner(System.in);
+				return scan.next();
+				}
+	public static boolean checkRegNumber(String v){
+		if((v.length()==6)||(v.length()==7)){
+				System.out.println("you enter reg number:" + v);
+				return true;
+				}
+		else{System.out.println("Wrong registration number");
+				return false;
+				}
 
 	}
+
 
 	public static String confirmRegistrationNumber() {
 		System.out.println("\nConfirm Registration number:");
@@ -68,14 +78,19 @@ public class TSG_main {
 			switch (userChoice) {
 			case 1:
 				if (availableParkingCount > 0) {
-					vehicleNumber = getRegistrationNumber();
-					// add Vehicle in array
-					vehicleInfo.addVehicle(vehicleNumber);
-				} else {
-					System.out.println("Parking is Full");
+						vehicleNumber = getRegistrationNumber();
+						while(checkRegNumber(vehicleNumber)){
+				// add Vehicle in array
+									vehicleInfo.addVehicle(vehicleNumber);
+									break;
+								}
+
+					} else {
+				System.out.println("Parking is Full");
 				}
 
-				break;
+			break;
+
 
 			case 2:
 
