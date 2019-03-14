@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.*;
 
 
 public class TSG_main {
@@ -6,7 +7,7 @@ public class TSG_main {
 
 
 	public static void printWelcome() {
-		System.out.println("     Welcome to 24Seven Garage!");
+		System.out.println("    \n Welcome to 24Seven Garage!");
 		//System.out.println("****************************************");
 	}
 
@@ -28,6 +29,16 @@ public class TSG_main {
 		System.out.print("\nMake Your Choice: ");
 	}
 
+	public static boolean checkCardNumber(String card_number){
+		if((card_number.length()==16)&&(card_number.matches("[0-9]+"))){
+					return true;
+					}
+	else{System.out.println("Wrong format. Try again");
+			return false;}
+	}
+
+
+
 	public static int readUsersChoice() {
 		Scanner scan = new Scanner(System.in);
 		return scan.nextInt();
@@ -39,6 +50,16 @@ public class TSG_main {
 				Scanner scan = new Scanner(System.in);
 				return scan.next();
 				}
+
+	public static String getCardNumber(){
+		System.out.println("\nEnter card number (16 digits) :");
+		Scanner scan = new Scanner(System.in);
+		return scan.next();
+		}
+
+
+
+
 	public static boolean checkRegNumber(String v){
 		if((v.length()==6)||(v.length()==7)&&((v.matches("[a-zA-Z0-9_]+")))){
 				System.out.println("you enter reg number:" + v);
@@ -71,7 +92,9 @@ public class TSG_main {
 			showInfoMenu(availableParkingCount);
 
 			showOptionMenu();
-			userChoice = readUsersChoice();
+			try{
+			userChoice = readUsersChoice();}
+			catch(Exception e){System.out.println("Try a number instead.");}
 
 
 			switch (userChoice) {
@@ -96,19 +119,40 @@ public class TSG_main {
 				vehicleNumber = getRegistrationNumber();
 				// ask for payment
 				Vehicle vehicleToRemove = vehicleInfo.getVehicle(vehicleNumber);
-				if (vehicleToRemove != null) {
-					trans.doPaymnet(vehicleToRemove.inTime);
-					//Remove Vehicle from array
-					vehicleInfo.removeVehicle(vehicleNumber);
-				}
+					if (vehicleToRemove != null) {
+						System.out.println("Enter the time of stay:");
+						Scanner scan = new Scanner(System.in);
+						try{
+							int time = scan.nextInt();
+							double amount;
+							int price = 10;
+							amount = time*price;
+							System.out.println("Your parking price is: " + amount);
+							String card_number = getCardNumber();
 
-				break;
+						 boolean successful = checkCardNumber(card_number);
+						while(successful){
+								System.out.println("Successful!");
+								System.out.println("*************************");
+								System.out.println("Receipt: vehicle number:"+ vehicleNumber+"\ntime of stay:"+ time+"\namount payed:"+amount);
+								System.out.println("Have a nice day!");
+
+								//Remove Vehicle from array
+							vehicleInfo.removeVehicle(vehicleNumber);
+							break;
+							}
+						}
+						catch(Exception e){System.out.println("Try a number instead");}
+          }
+						break;
 
 			case 3:
 				userChoice = 3;
 
-			}
-		}
-	}
 
+		}
+
+
+}
+}
 }
