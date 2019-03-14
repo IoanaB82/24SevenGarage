@@ -20,12 +20,12 @@ public class TSG_main {
 	public static void showOptionMenu() {
 		// show menu 1. Park 2. exit
 
-		System.out.println("Select Your Choice:");
+		System.out.println("Chose a number corresponding to your option:");
 		System.out.println("1: Want to park Vehicle?");
 		System.out.println("2: Exit from parking?");
 		System.out.println("3: Shut Down");
 
-		System.out.print("\nChoose your Choice: ");
+		System.out.print("\nMake Your Choice: ");
 	}
 
 	public static int readUsersChoice() {
@@ -35,19 +35,18 @@ public class TSG_main {
 	}
 
 	public static String getRegistrationNumber() {
-				System.out.println("\nEnter Registration number ( Follow this format:xxx-12xx) :");
+				System.out.println("\nEnter Registration number (only numbers or letters accepted) :");
 				Scanner scan = new Scanner(System.in);
 				return scan.next();
 				}
 	public static boolean checkRegNumber(String v){
-		if((v.length()==6)||(v.length()==7)){
+		if((v.length()==6)||(v.length()==7)&&((v.matches("[a-zA-Z0-9_]+")))){
 				System.out.println("you enter reg number:" + v);
 				return true;
 				}
 		else{System.out.println("Wrong registration number");
 				return false;
 				}
-
 	}
 
 
