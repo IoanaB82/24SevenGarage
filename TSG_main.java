@@ -29,6 +29,7 @@ public class TSG_main {
 		System.out.print("\nMake Your Choice: ");
 	}
 
+	//method to validate that card number contains exactly 16 digits
 	public static boolean checkCardNumber(String card_number){
 		if((card_number.length()==16)&&(card_number.matches("[0-9]+"))){
 					return true;
@@ -37,12 +38,13 @@ public class TSG_main {
 			return false;}
 	}
 
-
-
+	//method to manage try-catch for integer when user types choice
 	public static int readUsersChoice() {
-		Scanner scan = new Scanner(System.in);
-		return scan.nextInt();
-
+				int choice = 0;
+				try{Scanner scan = new Scanner(System.in);
+				choice = scan.nextInt();}
+				catch(Exception e){System.out.println("Try a number");}
+				return choice;
 	}
 
 	public static String getRegistrationNumber() {
@@ -57,25 +59,23 @@ public class TSG_main {
 		return scan.next();
 		}
 
-
-
-
+		//method to validate that vehicle's number contains only letters and digits
 	public static boolean checkRegNumber(String v){
 		if((v.length()==6)||(v.length()==7)&&((v.matches("[a-zA-Z0-9_]+")))){
-				System.out.println("you enter reg number:" + v);
+				System.out.println("You entered registration number:" + v);
 				return true;
 				}
-		else{System.out.println("Wrong registration number");
+		else{System.out.println("Wrong registration number. Try again!");
 				return false;
 				}
 	}
 
-
-	public static String confirmRegistrationNumber() {
+	//we don't use this method
+	/*public static String confirmRegistrationNumber() {
 		System.out.println("\nConfirm Registration number:");
 		Scanner scan = new Scanner(System.in);
 		return scan.next();
-	}
+	}*/
 
 	public static void main(String[] args) {
 
@@ -92,23 +92,28 @@ public class TSG_main {
 			showInfoMenu(availableParkingCount);
 
 			showOptionMenu();
-			try{
-			userChoice = readUsersChoice();}
-			catch(Exception e){System.out.println("Try a number instead.");}
+
+			userChoice = readUsersChoice();
 
 
 			switch (userChoice) {
 			case 1:
 				if (availableParkingCount > 0) {
 						vehicleNumber = getRegistrationNumber();
-						while(checkRegNumber(vehicleNumber)){
+						boolean userExists = vehicleInfo.checkIfUserExist(vehicleNumber);
+						if(!userExists){
+								while(checkRegNumber(vehicleNumber)){
 				// add Vehicle in array
-									vehicleInfo.addVehicle(vehicleNumber);
-									break;
+								vehicleInfo.addVehicle(vehicleNumber);
+								break;
 								}
-
-					} else {
-				System.out.println("Parking is Full");
+						}
+						else{
+							System.out.println("Already parked. Do you want to pay instead?");
+						}
+						}
+				else {
+							System.out.println("Parking is Full");
 				}
 
 			break;
@@ -117,39 +122,51 @@ public class TSG_main {
 			case 2:
 
 				vehicleNumber = getRegistrationNumber();
+				//validate if number exists parked
+				boolean userExists = vehicleInfo.checkIfUserExist(vehicleNumber);
+				if(userExists){
 				// ask for payment
-				Vehicle vehicleToRemove = vehicleInfo.getVehicle(vehicleNumber);
-					if (vehicleToRemove != null) {
-						System.out.println("Enter the time of stay:");
-						Scanner scan = new Scanner(System.in);
-						try{
-							int time = scan.nextInt();
-							double amount;
-							int price = 10;
-							amount = time*price;
-							System.out.println("Your parking price is: " + amount);
-							String card_number = getCardNumber();
+						Vehicle vehicleToRemove = vehicleInfo.getVehicle(vehicleNumber);
+							if (vehicleToRemove != null) {
+								System.out.println("Enter the time of stay:");
+								Scanner scan = new Scanner(System.in);
+									try{
+											int time = scan.nextInt();
+											double amount;
+											int price = 10;
+											amount = time*price;
+											System.out.println("Your parking price is: " + amount);
+											String card_number = getCardNumber();
 
-						 boolean successful = checkCardNumber(card_number);
-						while(successful){
-								System.out.println("Successful!");
-								System.out.println("*************************");
-								System.out.println("Receipt: vehicle number:"+ vehicleNumber+"\ntime of stay:"+ time+"\namount payed:"+amount);
-								System.out.println("Have a nice day!");
+						 					boolean successful = checkCardNumber(card_number);
+											while(successful){
+													System.out.println("Successful!");
+													System.out.println("*************************");
+													System.out.println("Receipt: vehicle number:"+ vehicleNumber+"\ntime of stay:"+ time+"\namount payed:"+amount);
+													System.out.println("Have a nice day!");
 
-								//Remove Vehicle from array
-							vehicleInfo.removeVehicle(vehicleNumber);
-							break;
+													//Remove Vehicle from array
+													vehicleInfo.removeVehicle(vehicleNumber);
+													break;
+											}
+										}
+										catch(Exception e){
+											System.out.println("Try a number instead");
+										}
 							}
-						}
-						catch(Exception e){System.out.println("Try a number instead");}
-          }
+					}
+					else{
+						System.out.println("User not found. Can't do payment.");
+					}
+
 						break;
 
 			case 3:
 				userChoice = 3;
-
-
+			break;
+			default:
+				userChoice = 3;
+			break;
 		}
 
 
