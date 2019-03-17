@@ -34,7 +34,7 @@ public class TSG_main {
 		if((card_number.length()==16)&&(card_number.matches("[0-9]+"))){
 					return true;
 					}
-	else{System.out.println("Wrong format. Try again");
+	else{//System.out.println("Wrong format. Try again");
 			return false;}
 	}
 
@@ -70,12 +70,6 @@ public class TSG_main {
 				}
 	}
 
-	//we don't use this method
-	/*public static String confirmRegistrationNumber() {
-		System.out.println("\nConfirm Registration number:");
-		Scanner scan = new Scanner(System.in);
-		return scan.next();
-	}*/
 
 	public static void main(String[] args) {
 
@@ -100,17 +94,19 @@ public class TSG_main {
 			case 1:
 				if (availableParkingCount > 0) {
 						vehicleNumber = getRegistrationNumber();
-						boolean userExists = vehicleInfo.checkIfUserExist(vehicleNumber);
-						if(!userExists){
-								while(checkRegNumber(vehicleNumber)){
-				// add Vehicle in array
-								vehicleInfo.addVehicle(vehicleNumber);
-								break;
+						while(checkRegNumber(vehicleNumber)){
+									boolean userExists = vehicleInfo.getVehicleStatus(vehicleNumber);
+									if(!userExists){
+										// add Vehicle in array
+										vehicleInfo.addVehicle(vehicleNumber);
+										break;
+									}
+									else{
+										System.out.println("Already parked. Do you want to pay instead?");
+									}
+									break;
 								}
-						}
-						else{
-							System.out.println("Already parked. Do you want to pay instead?");
-						}
+
 						}
 				else {
 							System.out.println("Parking is Full");
@@ -120,10 +116,10 @@ public class TSG_main {
 
 
 			case 2:
-
+				vehicleInfo.printEntires();
 				vehicleNumber = getRegistrationNumber();
 				//validate if number exists parked
-				boolean userExists = vehicleInfo.checkIfUserExist(vehicleNumber);
+				boolean userExists = vehicleInfo.getVehicleStatus(vehicleNumber);
 				if(userExists){
 				// ask for payment
 						Vehicle vehicleToRemove = vehicleInfo.getVehicle(vehicleNumber);
@@ -136,10 +132,11 @@ public class TSG_main {
 											int price = 10;
 											amount = time*price;
 											System.out.println("Your parking price is: " + amount);
-											String card_number = getCardNumber();
+											while(true){
+												String card_number = getCardNumber();
 
-						 					boolean successful = checkCardNumber(card_number);
-											while(successful){
+						 						boolean successful = checkCardNumber(card_number);
+												if(successful){
 													System.out.println("Successful!");
 													System.out.println("*************************");
 													System.out.println("Receipt: vehicle number:"+ vehicleNumber+"\ntime of stay:"+ time+"\namount payed:"+amount);
@@ -148,6 +145,9 @@ public class TSG_main {
 													//Remove Vehicle from array
 													vehicleInfo.removeVehicle(vehicleNumber);
 													break;
+												}
+										 		else{System.out.println("Wrong number, try again.");
+											}
 											}
 										}
 										catch(Exception e){
