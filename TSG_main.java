@@ -76,7 +76,7 @@ public class TSG_main {
 		int userChoice= 0;
 		String vehicleNumber;
 		Vehicle_info vehicleInfo = new Vehicle_info();
-		TSG_Transaction trans = new TSG_Transaction();
+	//	TSG_Transaction trans = new TSG_Transaction();
 		int availableParkingCount = 5;
 		printWelcome();
 
@@ -116,7 +116,7 @@ public class TSG_main {
 
 
 			case 2:
-				vehicleInfo.printEntires();
+				//vehicleInfo.printEntires(); - used just to test the data
 				vehicleNumber = getRegistrationNumber();
 				//validate if number exists parked
 				boolean userExists = vehicleInfo.getVehicleStatus(vehicleNumber);
